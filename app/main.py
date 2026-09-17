@@ -2,17 +2,21 @@ from fastapi import Depends, FastAPI
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.v1.router import api_router
 from app.db.session import get_db
 
 app = FastAPI(
     title="Attendance Management System",
-    description="A simple attendance management system",
-    version="1.0.0"
+    version="1.0.0",
 )
 
+app.include_router(api_router)
+
+
 @app.get("/")
-async def read_root():
-    return {"message": "Welcome to the Attendance Management System!"}
+async def root():
+    return {"message": "Attendance Management API is running"}
+
 
 @app.get("/health")
 async def health_check():
