@@ -8,6 +8,8 @@ from app.schemas.student import StudentCreate
 class StudentAlreadyExistsError(Exception):
     pass
 
+class StudentNotFoundError(Exception):
+    pass
 
 class StudentService:
     def __init__(
@@ -53,5 +55,15 @@ class StudentService:
 
         # 5. Commit the transaction
         await self.session.commit()
+
+        return student
+    
+    async def get_student(self, student_id: int) -> Student:
+        student = await self.repository.get_by_id(student_id)
+
+        if student is None:
+            raise StudentNotFoundError(
+                f"Student with ID {student_id} was not found"
+            )
 
         return student
